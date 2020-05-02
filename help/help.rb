@@ -13,7 +13,7 @@ module Help
         embed.description = "You can find out more about each module by doing `.help <module name>`."
 
         help['modules'].keys.each do |moduleName|
-          embed.add_field name: "#{moduleName}", value: "#{help['modules'][moduleName]['desc']}"
+          embed.add_field name: "`#{moduleName}`", value: "#{help['modules'][moduleName]['desc']}", inline: true
         end
 
       end

@@ -10,7 +10,7 @@ module Hangman
 
   message(start_with: '.hangman newgame') do |event|
 
-    @wizardData[event.user.id.to_s] = {
+    @wizardData[event.user.id.to_s] = { # TODO delete this after the wizard completes
       :creator => event.user.id.to_s,
       :channel => event.channel.id.to_s,
       :stage => 2

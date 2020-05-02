@@ -73,7 +73,7 @@ module Notes
 
   end
 
-  message(start_with: ".noteget") do |event|
+  message(content: ".noteget") do |event|
     notes = Note.where(identifier: event.channel.id.to_s)
     event.channel.send_embed do |embed|
       embed.title = (event.channel.private?) ? "My Notes" : "Channel Notes"

@@ -6,10 +6,12 @@ require 'mongoid'
 
 # Bot containers
 
-require './notes/notes'
 require './utils/utils'
-require './hangman/hangman'
 require './help/help'
+require './notes/notes'
+require './hangman/hangman'
+require './polls/polls'
+
 
 # Configure CouchPotato
 
@@ -20,7 +22,8 @@ Mongoid.load!('./mongoid.yml', :development)
 bot = Discordrb::Bot.new token: JSON.parse(File.read 'config.json')["bot_token"]
 
 bot.ready do |event|
-  bot.game = "花子ちゃん、どこですか"
+  #  bot.game = "花子ちゃん、どこですか"
+  bot.game = '​'
   bot.idle
 end
 
@@ -28,6 +31,7 @@ bot.include! Utils
 bot.include! Help
 bot.include! Notes
 bot.include! Hangman
+bot.include! Polls
 
 puts "Starting bot."
 
@@ -35,5 +39,7 @@ at_exit do
   bot.stop
 end
 
-bot.run
+if __FILE__ == $0
+  bot.run #Apparently I shouldn't do this
+end
 

@@ -16,14 +16,20 @@ module Utils
     exit
   end
 
-  message(content: ".apoptosis") do |event|
-    break unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
+  message(content: ".q") do |event|
+    next unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
 
     event.respond "bye"
     exit
   end
 
+  message(content: '.r') do |event|
+    next unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
 
+    event.respond "restarting"
+    exec('bundle exec ruby micro.rb')
+
+  end
 
 
 end
