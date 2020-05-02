@@ -23,10 +23,6 @@ module Utils
     exit
   end
 
-  message(content: ".help") do |event|
-    event.respond "not implemented stupid"
-    exit
-  end
 
 
 

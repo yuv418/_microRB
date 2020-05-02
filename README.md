@@ -14,7 +14,7 @@ _micro rewritten in Ruby
 
 ## Running
 
-Update the `config.json` with your `bot_token` and `admin_user` (Discord id as int)
+Copy the template config files to their names, minus `.template` and modify the variables inside each accordingly.
 
 ```bash
 bundle install

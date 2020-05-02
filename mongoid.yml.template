@@ -1,0 +1,12 @@
+development:
+  clients:
+    default:
+      database: micro
+      hosts:
+        - localhost:27017
+      host: localhost
+
+      options:
+        user: 'USERNAME'
+        password: 'PASSWORD'
+        server_selection_timeout: 5

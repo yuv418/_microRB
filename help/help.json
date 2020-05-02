@@ -1,0 +1,26 @@
+{
+    "modules": {
+        "hangman": {
+            "desc": "Play hangman!",
+            "commands": {
+                ".hangman newgame": "Make a new hangman game (channel specific)"
+            }
+        },
+        "notes": {
+            "desc": "Create channel and user specific notes!",
+            "commands": {
+                ".notecreate": "Create a new note (channel specific)",
+                ".noteget": "Get the channel's notes",
+                ".notedelete <ID>": "Delete a note. Find the ID as the number next to the note title in `.noteget`."
+            }
+        },
+        "utils": {
+            "desc": "Bot utilities. Maybe kinda boring.",
+            "commands": {
+                ".apoptosis": "Stop trying to shut down my bot",
+                ".ping": "Ping the bot. Self-explanatory",
+                ".testembed": "Sends a test embed."
+            }
+        }
+    }
+}
