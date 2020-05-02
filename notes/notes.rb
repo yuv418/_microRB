@@ -1,6 +1,6 @@
 require 'discordrb'
 require 'securerandom'
-require './notes/notesmodel.rb'
+require './notes/notesmodel'
 
 module Notes
   extend Discordrb::EventContainer

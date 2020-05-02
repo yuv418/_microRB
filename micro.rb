@@ -8,6 +8,7 @@ require 'mongoid'
 
 require './notes/notes'
 require './utils/utils'
+require './hangman/hangman'
 
 # Configure CouchPotato
 
@@ -24,6 +25,7 @@ end
 
 bot.include! Notes
 bot.include! Utils
+bot.include! Hangman
 
 puts "Starting bot."
 
