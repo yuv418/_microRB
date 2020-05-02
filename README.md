@@ -4,13 +4,13 @@ _micro rewritten in Ruby
 
 ## Checklist: 
 
-[ ] User and channel (server) notes
-[ ] Play media from ytdl supported sources (hopefully)
-[ ] Admin things (kick, ban)
-[ ] User rankings in server
-[ ] Snippets from websites (Wikipedia, EB, whatever)
-[ ] GaimBot support
-[ ] User role management
+- [ ] User and channel (server) notes
+- [ ] Play media from ytdl supported sources (hopefully)
+- [ ] Admin things (kick, ban)
+- [ ] User rankings in server
+- [ ] Snippets from websites (Wikipedia, EB, whatever)
+- [ ] GaimBot support
+- [ ] User role management
 
 ## Running
 
