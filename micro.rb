@@ -38,7 +38,6 @@ bot.include! Hangman
 bot.include! Polls
 
 puts "Starting bot."
-puts bot.help_modules
 
 at_exit do
   bot.stop
