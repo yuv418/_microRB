@@ -39,7 +39,7 @@ module Utils
     next unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
 
     event.respond "restarting"
-    exec('bundle exec ruby micro.rb')
+    exec("bundle exec ruby micro.rb #{event.channel.id}")
 
   end
 

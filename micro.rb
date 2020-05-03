@@ -39,6 +39,10 @@ bot.include! Polls
 
 puts "Starting bot."
 
+if ARGV[0]
+  bot.channel(ARGV[0]).send_message "started up"
+end
+
 at_exit do
   bot.stop
 end

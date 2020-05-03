@@ -9,12 +9,13 @@ module Hangman
   HELP_DATA = {
     "desc" => "Play hangman!",
     "commands" => {
-      ".hangman newgame" => "Make a hangman game (channel specific)"
+      ".hangman newgame" => "Make a hangman game (channel specific). This doesn't work if there's already a game in the channel.",
+      ".hangman deletegame" => "Delete a hangman game in the channel (only if you are the creator).\n**Note:** the bot will ignore you with this command if there is no existing game." # TODO admins too
     }
   }
   @wizardData = {}
 
-  message(start_with: '.hangman newgame') do |event|
+  message(content: '.hangman newgame') do |event|
 
     @wizardData[event.user.id.to_s] = { # TODO delete this after the wizard completes
       :creator => event.user.id.to_s,
@@ -29,6 +30,26 @@ module Hangman
       embed.color = 0xb412ea
       embed.description = "What's the word for the game you want to create?"
     end
+  end
+
+  message(content: '.hangman deletegame') do |event|
+    next unless HangmanGame.where(channel: event.channel.id.to_s).count == 1
+    game = HangmanGame.where(channel: event.channel.id.to_s).first
+    next unless game.creator == event.user.id.to_s
+
+    game.destroy
+
+    event.channel.send_embed do |embed|
+      embed.title = "Game Deleted"
+      embed.description = "The current game in this channel has been deleted.\n**Anyone can start a new game.**"
+      embed.color = 0xff0000
+
+      embed.footer = Discordrb::Webhooks::EmbedFooter.new(
+        text: "Game deleted by @#{event.user.username}##{event.user.discriminator}",
+        icon_url: event.user.avatar_url
+      )
+    end
+
   end
 
   dm do |event|
