@@ -3,6 +3,16 @@ require 'discordrb'
 module Utils
   extend Discordrb::EventContainer
 
+  HELP_DATA = {
+    "desc" => "Bot utilities. Maybe kinda boring.",
+    "commands" => {
+      ".q" => "Stop trying to shut down my bot",
+      ".r" => "Yeah no",
+      ".ping" => "Ping the bot. Self-explanatory",
+      ".testembed" => "Sends a test embed."
+    }
+  }
+
   message(start_with: ".ping") do |event|
     decim = event.message.content.strip.split[1]
     decim = decim.to_i ? decim.to_i : 2

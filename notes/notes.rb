@@ -5,6 +5,15 @@ require './notes/notesmodel'
 module Notes
   extend Discordrb::EventContainer
 
+  HELP_DATA = {
+    "desc" => "Create channel and user specific notes!",
+    "commands" => {
+      ".notecreate" => "Create a new note (channel specific)",
+      ".noteget" => "Get the channel's notes",
+      ".notedelete <ID>" => "Delete a note. Find the ID as the number next to the note title in `.noteget`."
+    }
+  }
+
   @wizardData = {}
 
   message(content: '.notecreate') do |event|

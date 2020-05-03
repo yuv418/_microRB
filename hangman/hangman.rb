@@ -6,6 +6,12 @@ require 'securerandom'
 module Hangman
   extend Discordrb::EventContainer
 
+  HELP_DATA = {
+    "desc" => "Play hangman!",
+    "commands" => {
+      ".hangman newgame" => "Make a hangman game (channel specific)"
+    }
+  }
   @wizardData = {}
 
   message(start_with: '.hangman newgame') do |event|

@@ -4,6 +4,15 @@ require './polls/pollsmodel.rb'
 
 module Polls
   extend Discordrb::EventContainer # TODO make custom container with colors and other cool thing we will need
+
+  HELP_DATA = {
+    "desc"=> "Make multiple choice, open-ended, or vote polls.",
+    "commands"=> {
+      ".poll"=> "Make a poll in the current channel."
+    }
+  }
+
+
   @pollColor = 0x329efc
   @error = 0xff0000
   @success = 0x00ff00
