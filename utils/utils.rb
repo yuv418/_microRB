@@ -3,8 +3,10 @@ require 'discordrb'
 module Utils
   extend Discordrb::EventContainer
 
-  message(content: ".ping") do |event|
-    event.respond "pong #{(Time.now - event.timestamp) * 100} ms"
+  message(start_with: ".ping") do |event|
+    decim = event.message.content.strip.split[1]
+    decim = decim.to_i ? decim.to_i : 2
+    event.respond "pong #{((Time.now - event.timestamp) * 100).round(decim)} ms"
   end
 
   message(content: ".testembed") do |event|

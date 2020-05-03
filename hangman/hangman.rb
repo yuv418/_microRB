@@ -31,8 +31,8 @@ module Hangman
     next unless @wizardData[event.user.id.to_s][:stage] == 2
 
     @wizardData[event.user.id.to_s][:template] = event.message.content.downcase.strip.split ''
-    @wizardData[event.user.id.to_s][:guessed] = event.message.content.downcase.strip.gsub(/[a-z]/, '_').split ''
-    @wizardData[event.user.id.to_s][:stage] = 3
+    @wizardData[event.user.id.to_s][:guessed] = event.message.content.downcase.strip.gsub(/[^\s-]/, '_').split ''
+
 
     event.user.dm.send_embed do |embed|
       embed.title = "Number of Guesses for Game"
@@ -40,13 +40,15 @@ module Hangman
       embed.description = "How many guesses will your game have?"
     end
 
+    @wizardData[event.user.id.to_s][:stage] = 3
   end
 
   dm do |event|
 
     next unless @wizardData.has_key? event.user.id.to_s
     next unless @wizardData[event.user.id.to_s][:stage] == 3
-    next unless event.message.content.to_i != 0 # Hacky async fix :(
+    next unless event.message.content.to_i > 0
+
 
     puts event.message.content
 
@@ -90,6 +92,9 @@ module Hangman
     next unless event.message.content.length == 1 # Is a 1-letter guess
 
     game = HangmanGame.where(channel: event.channel.id.to_s).first
+
+    next unless game[:creator] != event.user.id.to_s
+
     guess = event.message.content.downcase
 
     if not game[:template].include? guess and not game[:wrong_guesses].has_key? guess
