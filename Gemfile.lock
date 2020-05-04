@@ -9,7 +9,10 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     bson (4.8.2)
+    colorize (0.8.1)
     concurrent-ruby (1.1.6)
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
@@ -24,9 +27,20 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     event_emitter (0.2.6)
     ffi (1.12.2)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
+    http (4.4.1)
+      addressable (~> 2.3)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      http-parser (~> 1.2.0)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    http-form_data (2.3.0)
+    http-parser (1.2.1)
+      ffi-compiler (>= 1.0, < 2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     io-console (0.5.6)
@@ -45,6 +59,8 @@ GEM
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
+    public_suffix (4.0.4)
+    rake (13.0.1)
     rbnacl (3.4.0)
       ffi
     reline (0.1.3)
@@ -70,7 +86,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize
   discordrb
+  http
   irb
   json
   mongoid (~> 7.0.6)

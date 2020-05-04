@@ -10,5 +10,7 @@ class HangmanGame
   field :correct_guesses, type: Hash, default: -> {{}}
   field :wrong_guesses, type: Hash, default: -> {{}}
   field :guesses, type: Integer
+  field :value, type: Integer, default: -> {0}
+  field :paid, type: Boolean
 
 end

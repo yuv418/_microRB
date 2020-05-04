@@ -28,7 +28,7 @@ module Help
 
       end
     else
-      moduleName = event.message.content.strip.split[1].titlecase
+      moduleName = event.message.content.strip.split[1]
       next unless help_strings.include? moduleName
 
       help_module = help[help_strings.index moduleName]

@@ -1,10 +1,13 @@
 require './hangman/hangmanmodel'
+require './jeepapi/jeep'
+require './botpatcher/dmwizardcontainer'
 require 'discordrb'
 require 'securerandom'
 
 
 module Hangman
-  extend Discordrb::EventContainer
+  include DMWizardContainer
+  extend DMWizardContainer
 
   HELP_DATA = {
     "desc" => "Play hangman!",
@@ -13,23 +16,29 @@ module Hangman
       ".hangman deletegame" => "Delete a hangman game in the channel (only if you are the creator).\n**Note:** the bot will ignore you with this command if there is no existing game." # TODO admins too
     }
   }
-  @wizardData = {}
+
+  @jeep = JeepAPI.new base_url: @@config['jeep_url'], user_id: @@config['jeep_user'], key: @@config['jeep_key'], verify_ssl: @@config['jeep_verify_ssl']
+
 
   message(content: '.hangman newgame') do |event|
 
-    @wizardData[event.user.id.to_s] = { # TODO delete this after the wizard completes
-      :creator => event.user.id.to_s,
-      :channel => event.channel.id.to_s,
-      :stage => 2
-    }
-
-    puts "Stage 1 #{@wizardData}"
+#    @wizardData[event.user.id.to_s] = { # TODO delete this after the wizard completes
+#      :creator => event.user.id.to_s,
+#      :channel => event.channel.id.to_s,
+#      :stage => 2
+#    }
 
     event.user.dm.send_embed do |embed|
       embed.title = "Welcome to the Hangman Game Creation Wizard!"
       embed.color = 0xb412ea
       embed.description = "What's the word for the game you want to create?"
     end
+
+    stage_create event.user.id.to_s do |data|
+      data[:channel] = event.channel.id.to_s
+      data[:creator] = event.user.id.to_s
+    end
+
   end
 
   message(content: '.hangman deletegame') do |event|
@@ -54,55 +63,64 @@ module Hangman
 
   dm do |event|
 
-    next unless @wizardData.has_key? event.user.id.to_s
-    next unless @wizardData[event.user.id.to_s][:stage] == 2
+    stage stage: 1, event: event, key: event.user.id.to_s do |data, key|
+      data[:template] = event.message.content.downcase.strip.split ''
+      data[:guessed] = event.message.content.downcase.strip.gsub(/[^\s-]/, '_').split ''
 
-    @wizardData[event.user.id.to_s][:template] = event.message.content.downcase.strip.split ''
-    @wizardData[event.user.id.to_s][:guessed] = event.message.content.downcase.strip.gsub(/[^\s-]/, '_').split ''
+      event.user.dm.send_embed do |embed|
+        embed.title = "Number of Guesses for Game"
+        embed.color = 0xb412ea
+        embed.description = "How many guesses will your game have?"
+      end
 
-
-    event.user.dm.send_embed do |embed|
-      embed.title = "Number of Guesses for Game"
-      embed.color = 0xb412ea
-      embed.description = "How many guesses will your game have?"
+      advance_stage key
     end
 
-    @wizardData[event.user.id.to_s][:stage] = 3
   end
+
 
   dm do |event|
 
-    next unless @wizardData.has_key? event.user.id.to_s
-    next unless @wizardData[event.user.id.to_s][:stage] == 3
-    next unless event.message.content.to_i > 0
+    stage stage: 2, event: event, key: event.user.id.to_s do |data, key|
+      next unless event.message.content.to_i > 0 # Validation
 
+      data[:guesses] = event.message.content.to_i
 
-    puts event.message.content
+      event.user.dm.send_embed do |embed|
+        embed.title = "Paid Game"
+        embed.color = 0xb412ea
+        embed.description = "Do you want this game to be worth money (yes/no)?"
+      end
 
-    @wizardData[event.user.id.to_s][:guesses] = event.message.content.to_i
-    @wizardData[event.user.id.to_s].delete :stage
+      advance_stage key
+    end
+  end
 
-    if HangmanGame.where(channel: @wizardData[event.user.id.to_s][:channel]).count == 0
-      game = HangmanGame.new **@wizardData[event.user.id.to_s]
+  def self.start_game(event, data)
+    data.delete :stage
+
+    if HangmanGame.where(channel: data[:channel]).count == 0
+      game = HangmanGame.new **data
       game.save
 
-      puts "Stage 3 #{@wizardData}"
-
-      event.bot.channel(@wizardData[event.user.id.to_s][:channel].to_i).send_embed do |embed|
-
-        templateStr = @wizardData[event.user.id.to_s][:guessed].join(" ")
+      event.bot.channel(data[:channel].to_i).send_embed do |embed|
+        templateStr = data[:guessed].join(" ")
 
         embed.title = "New Game"
         embed.description = "Here's your new game!\n```#{templateStr}```\nYou have #{game.guesses} guesses.\n**Start guessing!**"
+
+        if not data[:paid]
+          embed.description += "\n\nThe game is worth **$#{data[:value]}.**\n**No one has paid for this game yet.**"
+          puts @jeep.request user: game.creator, amount: game.value, destination: event.bot.bot_application.id.to_s, message: "Money for your hangman game."
+        end
+
         embed.footer =  Discordrb::Webhooks::EmbedFooter.new(
           text: "Created by @#{event.user.username}##{event.user.discriminator}",
           icon_url: event.user.avatar_url
         )
 
       end
-
     else
-
       event.user.pm.send_embed do |embed|
         embed.title = "Error Creating Game"
         embed.description = "A game already exists in that channel."
@@ -110,6 +128,54 @@ module Hangman
       end
 
     end
+
+  end
+
+  dm do |event|
+
+    stage stage: 3, event: event, key: event.user.id.to_s do |data, key|
+      if event.message.content.strip.downcase == 'no'
+        data[:paid] = true
+
+        start_game event, data
+
+        stage_finish key
+      end
+
+      next unless event.message.content.strip.downcase == 'yes' 
+      data[:paid] = false
+
+      event.user.dm.send_embed do |embed|
+        embed.title = "Game Value"
+        embed.color = 0xb412ea
+        embed.description = "How much should this game be worth?"
+      end
+
+      advance_stage key
+    end
+  end
+
+  dm do |event|
+
+    stage stage: 4, event: event, key: event.user.id.to_s do |data, key|
+      next unless event.message.content.to_i > 0
+
+      data[:value] = event.message.content.to_i
+
+      start_game event, data
+      stage_finish key # really dont know if this is gonna work
+
+    end
+
+  end
+
+  dm do |event|
+    next if event.user.id == @@config['jeep_id']
+
+    puts event.inspect
+    puts
+    puts event.message.inspect
+
 
   end
 
@@ -121,6 +187,7 @@ module Hangman
     game = HangmanGame.where(channel: event.channel.id.to_s).first
 
     next unless game[:creator] != event.user.id.to_s
+    next unless game[:paid]
 
     guess = event.message.content.downcase
 
@@ -143,7 +210,7 @@ module Hangman
         end
       else
         event.channel.send_embed do |embed|
-          templateStr = game.template.join(" ")
+          templateStr = game.template.join("")
 
           embed.title = "You Lose!"
           embed.description = "Too bad! The word was\n```#{templateStr}```\nBetter luck next time!"

@@ -1,0 +1,17 @@
+[Unit]
+Description=_microRB
+After=network.target
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/_microRB
+ExecStart=/usr/local/bin/bundler exec ruby /home/user/_microRB/micro.rb
+Environment=PYTHONIOENCODING=utf8
+Restart=always
+RestartSec=1
+StartLimitIntervalSec=0
+
+
+[Install]
+WantedBy=multi-user.target
