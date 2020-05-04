@@ -25,7 +25,6 @@ module Utils
       embed.color = 0x00ff00
       embed.description = "test embed"
     end
-    exit
   end
 
   message(content: ".q") do |event|
