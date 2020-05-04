@@ -27,7 +27,12 @@ bot = MicroBot.new token: JSON.parse(File.read 'config.json')["bot_token"]
 
 bot.ready do |event|
   #  bot.game = "花子ちゃん、どこですか"
-  bot.game = '​'
+  if JSON.parse(File.read 'config.json')["stable"]
+    bot.game = '​'
+  else
+    bot.game = 'with rubies'
+  end
+
   bot.idle
 end
 

@@ -5,6 +5,7 @@
     "jeep_url": "https://url:port",
     "jeep_key": "",
     "jeep_verify_ssl": true,
-    "jeep_id": 000000000000000000
+    "jeep_id": 000000000000000000,
+    "stable": false
 
 }
