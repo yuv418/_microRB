@@ -1,6 +1,7 @@
 # _micro
 
 _micro rewritten in Ruby.
+
 **Note:** _microRB requires Ruby 2.7.
 
 ## Checklist: 
