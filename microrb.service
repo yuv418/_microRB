@@ -6,8 +6,7 @@ After=network.target
 Type=simple
 User=user
 WorkingDirectory=/home/user/_microRB
-ExecStart=/usr/local/bin/bundler exec ruby /home/user/_microRB/micro.rb
-Environment=PYTHONIOENCODING=utf8
+ExecStart=/bin/bash /home/user/_microRB/micro.sh
 Restart=always
 RestartSec=1
 StartLimitIntervalSec=0
