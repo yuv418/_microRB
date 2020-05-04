@@ -6,6 +6,10 @@ _micro rewritten in Ruby.
 
 ## Checklist: 
 
+- [x] Implement basic Hangman
+- [x] Implement basic Polls
+- [ ] Integrate Hangman with JeepAPI
+- [ ] Implement SUV currency
 - [x] User and channel (server) notes
 - [ ] Play media from ytdl supported sources (hopefully)
 - [ ] Admin things (kick, ban)
