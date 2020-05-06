@@ -38,7 +38,7 @@ module Help
         embed.description = "Below are the commands for this module and what you can do with them:"
 
         help_module::HELP_DATA['commands'].each do |command, description|
-          embed.add_field name: "`#{command}`", value: "#{description}", inline: true
+          embed.add_field name: "`#{command}`", value: "#{description}", inline: false
         end
 
       end

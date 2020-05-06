@@ -9,6 +9,7 @@ module Utils
       ".q" => "Stop trying to shut down my bot",
       ".r" => "Yeah no",
       ".ping" => "Ping the bot. Self-explanatory",
+      ".ping <decimalcount>" => "Ping with <decimalcount> decimals. Caps at some number.",
       ".testembed" => "Sends a test embed."
     }
   }

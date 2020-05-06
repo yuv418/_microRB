@@ -12,6 +12,7 @@ require './notes/notes'
 require './hangman/hangman'
 require './polls/polls'
 require './wizardtester/wizardtester'
+require './moderation/moderation'
 
 # Bot class monkey patcher
 
@@ -43,6 +44,7 @@ bot.include! Notes
 bot.include! Hangman
 bot.include! Polls
 bot.include! WizardTester
+bot.include! Moderation
 
 puts "Starting bot."
 
