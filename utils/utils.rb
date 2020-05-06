@@ -29,14 +29,14 @@ module Utils
   end
 
   message(content: ".q") do |event|
-    next unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
+    next event.respond "Stop trying to shutdown the bot thanks :smile:" unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
 
     event.respond "bye"
     exit
   end
 
   message(content: '.r') do |event|
-    next unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
+    next event.respond "Stop trying to restart the bot thanks :smile:" unless event.author.id == JSON.parse(File.read 'config.json')["admin_user"] # fix this later
 
     event.respond "restarting"
     exec("bundle exec ruby micro.rb #{event.channel.id}")

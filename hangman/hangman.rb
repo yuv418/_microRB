@@ -13,7 +13,7 @@ module Hangman
     "desc" => "Play hangman!",
     "commands" => {
       ".hangman newgame" => "Make a hangman game (channel specific). This doesn't work if there's already a game in the channel.",
-      ".hangman deletegame" => "Delete a hangman game in the channel (only if you are the creator).\n**Note:** the bot will ignore you with this command if there is no existing game." # TODO admins too
+      ".hangman deletegame" => "Delete a hangman game in the channel (only if you are the creator)." # TODO admins too
     }
   }
 
@@ -42,7 +42,8 @@ module Hangman
   end
 
   message(content: '.hangman deletegame') do |event|
-    next unless HangmanGame.where(channel: event.channel.id.to_s).count == 1
+    next event.channel.send_embed{ |embed|  embed.title = "Error Deleting Game"; embed.description = "Sorry, there is no game in this channel to delete!"; embed.color = @@error } unless HangmanGame.where(channel: event.channel.id.to_s).count == 1
+
     game = HangmanGame.where(channel: event.channel.id.to_s).first
     next unless game.creator == event.user.id.to_s
 

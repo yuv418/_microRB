@@ -1,7 +1,7 @@
 require 'mongoid'
 require 'discordrb'
 
-class ModerationModel
+class AdminRoleModel
   include Mongoid::Document
 
   field :role, type: String
