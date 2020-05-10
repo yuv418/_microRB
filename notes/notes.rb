@@ -34,6 +34,8 @@ module Notes
     wizardId = splitcmd[1]
     title = splitcmd[2..].join(" ")
 
+    next event.respond "Your title is too long!" unless title.length <= 100
+
     if not @wizardData.has_key? wizardId
       event.channel.send_embed do |embed|
         embed.title = "Error: Invalid Wizard Key"
@@ -58,6 +60,8 @@ module Notes
     splitcmd = event.message.content.split(" ")
     wizardId = splitcmd[1]
     body = splitcmd[2..].join(" ")
+
+    next event.respond "Your note's content is too long!" unless body.length <= 1900
 
     if not @wizardData.has_key? wizardId
       event.channel.send_embed do |embed|
